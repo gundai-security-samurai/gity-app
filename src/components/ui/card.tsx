@@ -73,10 +73,25 @@ const CardFooter = React.forwardRef<
 ));
 CardFooter.displayName = "CardFooter";
 
+const CardImage = React.forwardRef<
+  HTMLImageElement,
+  React.ImgHTMLAttributes<HTMLImageElement>
+>(({ className, ...props }, ref) => (
+  // biome-ignore lint/a11y/useAltText: <explanation>
+  <img
+    ref={ref}
+    className={cn("h-auto w-full", className)}
+    alt="cover-image"
+    {...props}
+  />
+));
+CardImage.displayName = "CardImage";
+
 export {
   Card,
   CardHeader,
   CardFooter,
+  CardImage,
   CardTitle,
   CardDescription,
   CardContent,

@@ -1,11 +1,14 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
+  decimal,
   integer,
   pgTable,
   primaryKey,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
 import type { AdapterAccountType } from "next-auth/adapters";
 
 export const users = pgTable("user", {
@@ -17,6 +20,12 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  payments: many(payments),
+}));
+
+export const insertUserSchema = createInsertSchema(users);
 
 export const accounts = pgTable(
   "account",
@@ -39,7 +48,7 @@ export const accounts = pgTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  }),
+  })
 );
 
 export const sessions = pgTable("session", {
@@ -61,7 +70,7 @@ export const verificationTokens = pgTable(
     compositePk: primaryKey({
       columns: [verificationToken.identifier, verificationToken.token],
     }),
-  }),
+  })
 );
 
 export const authenticators = pgTable(
@@ -82,5 +91,50 @@ export const authenticators = pgTable(
     compositePK: primaryKey({
       columns: [authenticator.userId, authenticator.credentialID],
     }),
-  }),
+  })
 );
+
+export const orderItems = pgTable("order_items", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  paymentId: text("payment_id")
+    .references(() => payments.id)
+    .notNull(),
+  squareProductId: text("product_id").notNull(),
+  quantity: integer("quantity").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+  payment: one(payments, {
+    fields: [orderItems.paymentId],
+    references: [payments.id],
+  }),
+}));
+
+export const insertOrderItemrSchema = createInsertSchema(orderItems);
+
+export const payments = pgTable("payments", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .references(() => users.id)
+    .notNull(),
+  squarePaymentId: text("square_payment_id").notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  status: text("status").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const paymentsRelations = relations(payments, ({ one, many }) => ({
+  user: one(users, {
+    fields: [payments.userId],
+    references: [users.id],
+  }),
+  orderItems: many(orderItems),
+}));
+
+export const insertPaymentSchema = createInsertSchema(payments);

@@ -1,0 +1,78 @@
+"use client";
+
+import { useMedia } from "react-use";
+
+import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import useOrderCart from "@/features/orders/hooks/use-order-cart";
+import Image from "next/image";
+import useGetProduct from "../api/use-get-product";
+import useOpenProduct from "../hooks/use-open-product";
+
+const ProductDetailModal = () => {
+  const { id, isOpen, onClose } = useOpenProduct();
+  const { addProduct } = useOrderCart();
+  const md = useMedia("(min-width: 768px)", false);
+
+  const productQuery = useGetProduct(id);
+
+  const handleAddProduct = () => {
+    if (!id) return;
+    addProduct(id);
+    onClose();
+  };
+
+  if (productQuery.isLoading) {
+    return null;
+  }
+
+  return (
+    <Drawer open={isOpen} onOpenChange={onClose}>
+      <DrawerContent>
+        {productQuery.data?.image && (
+          <div className="relative aspect-[16/9] m-4">
+            <Image
+              fill
+              src={productQuery.data?.image}
+              alt="Product Image"
+              className="object-cover rounded-md"
+            />
+          </div>
+        )}
+        <DrawerHeader>
+          <DrawerTitle className="text-start">
+            {productQuery.data?.name}
+          </DrawerTitle>
+          <DrawerDescription className="text-start">
+            <p className="">{`在庫${productQuery.data?.quantity}`}</p>
+            <p className="">{productQuery.data?.description}</p>
+          </DrawerDescription>
+          <p className="text-4xl font-bold text-start">{`¥${productQuery.data?.price.toLocaleString() ?? "-"}`}</p>
+        </DrawerHeader>
+        <DrawerFooter>
+          <div className="flex justify-between">
+            <Button variant="outline" size="sm" onClick={onClose}>
+              やめる
+            </Button>
+            <Button
+              variant="secondary"
+              className="px-8"
+              onClick={handleAddProduct}
+            >
+              カートに追加
+            </Button>
+          </div>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
+export default ProductDetailModal;
