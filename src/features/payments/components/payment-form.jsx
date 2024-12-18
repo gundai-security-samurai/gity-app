@@ -2,13 +2,13 @@
 
 import { CreditCard, PaymentForm as Form } from "react-square-web-payments-sdk";
 
-const PaymentForm = () => {
+const PaymentForm = ({ onPayment }) => {
   return (
     <Form
       applicationId={process.env.NEXT_PUBLIC_SQUARE_APPLICATION_ID}
       locationId={process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID}
       cardTokenizeResponseReceived={async (token) => {
-        console.log("🚀 ~ cardTokenizeResponseReceived={ ~ token:", token);
+        onPayment(token.token);
       }}
     >
       <CreditCard />

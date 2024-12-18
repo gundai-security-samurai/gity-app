@@ -19,10 +19,12 @@ export const users = pgTable("user", {
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  faceImage: text("face_image"),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
   payments: many(payments),
+  recognitionLogs: many(recognitionLogs),
 }));
 
 export const insertUserSchema = createInsertSchema(users);
@@ -94,47 +96,54 @@ export const authenticators = pgTable(
   })
 );
 
-export const orderItems = pgTable("order_items", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  paymentId: text("payment_id")
-    .references(() => payments.id)
-    .notNull(),
-  squareProductId: text("product_id").notNull(),
-  quantity: integer("quantity").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-export const orderItemsRelations = relations(orderItems, ({ one }) => ({
-  payment: one(payments, {
-    fields: [orderItems.paymentId],
-    references: [payments.id],
-  }),
-}));
-
-export const insertOrderItemrSchema = createInsertSchema(orderItems);
-
 export const payments = pgTable("payments", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   userId: text("user_id")
-    .references(() => users.id)
-    .notNull(),
+    .notNull()
+    .references(() => users.id),
   squarePaymentId: text("square_payment_id").notNull(),
-  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
-  status: text("status").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  amount: decimal("amount").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
-export const paymentsRelations = relations(payments, ({ one, many }) => ({
+export const paymentsRelations = relations(payments, ({ one }) => ({
   user: one(users, {
     fields: [payments.userId],
     references: [users.id],
   }),
-  orderItems: many(orderItems),
 }));
 
 export const insertPaymentSchema = createInsertSchema(payments);
+
+export const recognitionLogs = pgTable("recognition_logs", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id").references(() => users.id),
+  confidence: decimal("confidence", { precision: 5, scale: 2 }),
+  timestamp: timestamp("timestamp").notNull(),
+  image: text("image"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()), // レコードの更新時刻
+});
+
+export const recognitionLogsRelations = relations(
+  recognitionLogs,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [recognitionLogs.userId],
+      references: [users.id],
+    }),
+  })
+);
+
+export const insertRecognitionLogsSchema = createInsertSchema(recognitionLogs);

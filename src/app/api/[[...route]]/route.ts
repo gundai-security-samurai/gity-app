@@ -2,7 +2,10 @@ import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { handle } from "hono/vercel";
 
+import faceRecognitions from "@/features/face-recognitions/server/route";
+import payments from "@/features/payments/server/route";
 import products from "@/features/products/server/route";
+import users from "@/features/users/server/route";
 
 export const maxDuration = 59;
 
@@ -16,7 +19,11 @@ app.onError((err, c) => {
   return c.json({ error: "Internal error" }, 500);
 });
 
-const routes = app.route("/products", products);
+const routes = app
+  .route("/products", products)
+  .route("/payments", payments)
+  .route("/users", users)
+  .route("/face-recognitions", faceRecognitions);
 
 export const GET = handle(app);
 export const PUT = handle(app);

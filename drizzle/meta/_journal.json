@@ -8,6 +8,13 @@
       "when": 1733292095773,
       "tag": "0000_pretty_doorman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1734498325326,
+      "tag": "0001_illegal_sabretooth",
+      "breakpoints": true
     }
   ]
 }

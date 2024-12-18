@@ -11,23 +11,38 @@ import {
 } from "@/components/ui/dialog";
 import useOrderCart from "@/features/orders/hooks/use-order-cart";
 import useGetProducts from "@/features/products/api/use-get-products";
+import useCreatePayment from "../api/use-create-payment";
 import useOpenPayment from "../hooks/use-open-payment";
 import PaymentForm from "./payment-form";
 
 const PaymentModal = () => {
   const { isOpen, onClose } = useOpenPayment();
-  const { productIds, removeProduct } = useOrderCart();
+  const { productIds, removeProduct, clearCart } = useOrderCart();
 
   const productsQuery = useGetProducts();
+
+  const createPayment = useCreatePayment();
 
   const products = productsQuery.data?.filter((product) =>
     productIds.includes(product.id),
   );
 
-  const quantity = products?.reduce((acc, product) => {
+  const amount = products?.reduce((acc, product) => {
     const count = productIds.filter((id) => id === product.id).length;
     return acc + product.price * count;
   }, 0);
+
+  const handlePayment = (token: string) => {
+    createPayment.mutate(
+      { token, productIds },
+      {
+        onSuccess: () => {
+          clearCart();
+          onClose();
+        },
+      },
+    );
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -36,8 +51,7 @@ const PaymentModal = () => {
           <DialogTitle>購入</DialogTitle>
           <DialogDescription>決済画面</DialogDescription>
         </DialogHeader>
-
-        <PaymentForm />
+        <PaymentForm onPayment={handlePayment} />
         <div className="flex flex-col gap-2">
           {products?.map((product) => (
             <div
@@ -60,7 +74,7 @@ const PaymentModal = () => {
           ))}
         </div>
         <DialogFooter>
-          <p className="text-3xl text-end">{`合計 ${quantity?.toLocaleString()}円`}</p>
+          <p className="text-3xl text-end">{`合計 ${amount?.toLocaleString()}円`}</p>
         </DialogFooter>
       </DialogContent>
     </Dialog>

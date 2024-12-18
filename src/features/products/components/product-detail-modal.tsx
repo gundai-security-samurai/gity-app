@@ -65,8 +65,11 @@ const ProductDetailModal = () => {
               variant="secondary"
               className="px-8"
               onClick={handleAddProduct}
+              disabled={(productQuery.data?.quantity ?? 0) <= 0}
             >
-              カートに追加
+              {(productQuery.data?.quantity ?? 0) <= 0
+                ? "売り切れ"
+                : "カートに追加する"}
             </Button>
           </div>
         </DrawerFooter>

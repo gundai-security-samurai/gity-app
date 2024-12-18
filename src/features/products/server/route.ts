@@ -2,10 +2,11 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import z from "zod";
 
+import { authMiddleware } from "@/lib/auth-middleware";
 import { squareClient } from "@/lib/square";
 
 const app = new Hono()
-  .get("/", async (c) => {
+  .get("/", authMiddleware, async (c) => {
     const { result } = await squareClient.catalogApi.listCatalog(
       undefined,
       "ITEM"
@@ -37,6 +38,7 @@ const app = new Hono()
   })
   .get(
     "/:id",
+    authMiddleware,
     zValidator("param", z.object({ id: z.string().optional() })),
     async (c) => {
       const { id } = c.req.valid("param");

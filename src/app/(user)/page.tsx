@@ -1,17 +1,15 @@
-import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
-const HomePage = () => {
-  // const session = await auth();
+import { auth } from "@/lib/auth";
 
-  // if (!session) {
-  //   redirect("/sign-in");
-  // }
+const HomePage = async () => {
+  const session = await auth();
 
-  return (
-    <div className="">
-      <Button variant="block">Button</Button>
-    </div>
-  );
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  return <div className="">home</div>;
 };
 
 export default HomePage;

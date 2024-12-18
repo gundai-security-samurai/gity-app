@@ -5,8 +5,7 @@ import { auth } from "@/lib/auth";
 import UserButton from "./user-button";
 
 const Navigation = async () => {
-  // const session = await auth();
-  const session = false;
+  const session = await auth();
 
   return (
     <nav className="flex items-center gap-x-3">
