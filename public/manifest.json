@@ -4,8 +4,8 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "name": "Gity App",
-  "short_name": "gity app",
+  "name": "GityApp",
+  "short_name": "gityapp",
   "description": "群馬大学PBL2で改善するセキュリティに関するGITYアプリ",
   "icons": [
     {
