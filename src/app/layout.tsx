@@ -21,6 +21,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <head>
+        <link
+          rel="manifest"
+          href="/manifest.json"
+          crossOrigin="use-credentials"
+        />
+        <link rel="apple-touch-icon" href="/app-icon.png" />
+        <meta name="theme-color" content="#0093BC" />
+      </head>
       <body
         className={cn(
           inter.className,
