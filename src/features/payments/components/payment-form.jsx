@@ -2,7 +2,7 @@
 
 import { CreditCard, PaymentForm as Form } from "react-square-web-payments-sdk";
 
-const PaymentForm = ({ onPayment }) => {
+const PaymentForm = ({ onPayment, disabled }) => {
   return (
     <Form
       applicationId={process.env.NEXT_PUBLIC_SQUARE_APPLICATION_ID}
@@ -11,7 +11,7 @@ const PaymentForm = ({ onPayment }) => {
         onPayment(token.token);
       }}
     >
-      <CreditCard />
+      <CreditCard buttonProps={{ isLoading: disabled }} />
     </Form>
   );
 };

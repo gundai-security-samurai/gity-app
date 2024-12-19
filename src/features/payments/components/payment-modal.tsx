@@ -51,7 +51,10 @@ const PaymentModal = () => {
           <DialogTitle>購入</DialogTitle>
           <DialogDescription>決済画面</DialogDescription>
         </DialogHeader>
-        <PaymentForm onPayment={handlePayment} />
+        <PaymentForm
+          onPayment={handlePayment}
+          disabled={createPayment.isPending}
+        />
         <div className="flex flex-col gap-2">
           {products?.map((product) => (
             <div
