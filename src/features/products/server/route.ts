@@ -9,17 +9,17 @@ const app = new Hono()
   .get("/", authMiddleware, async (c) => {
     const { result } = await squareClient.catalogApi.listCatalog(
       undefined,
-      "ITEM"
+      "ITEM",
     );
 
     const _data = await Promise.all(
       (result.objects ?? []).map(async (item) => {
         const { result } = await squareClient.catalogApi.retrieveCatalogObject(
           item.id,
-          true
+          true,
         );
         return result;
-      })
+      }),
     );
 
     const data = _data.map((item) => ({
@@ -28,7 +28,7 @@ const app = new Hono()
       description: item.object?.itemData?.description,
       price: Number(
         item.object?.itemData?.variations?.[0].itemVariationData?.priceMoney
-          ?.amount
+          ?.amount,
       )!,
       image: item.relatedObjects?.find((object) => object.type === "IMAGE")
         ?.imageData?.url,
@@ -49,13 +49,13 @@ const app = new Hono()
 
       const { result } = await squareClient.catalogApi.retrieveCatalogObject(
         id,
-        true
+        true,
       );
 
       const {
         result: { counts },
       } = await squareClient.inventoryApi.retrieveInventoryCount(
-        result.object?.itemData?.variations?.[0].id!
+        result.object?.itemData?.variations?.[0].id!,
       );
 
       const data = {
@@ -64,7 +64,7 @@ const app = new Hono()
         description: result.object?.itemData?.description,
         price: Number(
           result.object?.itemData?.variations?.[0].itemVariationData?.priceMoney
-            ?.amount
+            ?.amount,
         )!,
         image: result.relatedObjects?.find((object) => object.type === "IMAGE")
           ?.imageData?.url,
@@ -72,7 +72,7 @@ const app = new Hono()
       };
 
       return c.json({ data });
-    }
+    },
   );
 
 export default app;

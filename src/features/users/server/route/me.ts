@@ -40,7 +40,7 @@ const app = new Hono()
 
       const { result: orderResult } =
         await squareClient.ordersApi.retrieveOrder(
-          paymentResult.payment.orderId!
+          paymentResult.payment.orderId!,
         );
 
       if (orderResult.errors || !orderResult.order) {
@@ -52,15 +52,15 @@ const app = new Hono()
           const { result: catalogResult } =
             await squareClient.catalogApi.retrieveCatalogObject(
               item.catalogObjectId!,
-              true
+              true,
             );
           const { result } =
             await squareClient.catalogApi.retrieveCatalogObject(
               catalogResult.object?.itemVariationData?.itemId!,
-              true
+              true,
             );
           return result;
-        })
+        }),
       );
 
       const products = _products.map((item) => ({
@@ -69,7 +69,7 @@ const app = new Hono()
         description: item.object?.itemData?.description,
         price: Number(
           item.object?.itemData?.variations?.[0].itemVariationData?.priceMoney
-            ?.amount
+            ?.amount,
         )!,
         image: item.relatedObjects?.find((object) => object.type === "IMAGE")
           ?.imageData?.url,

@@ -1,0 +1,18 @@
+{
+  "theme_color": "#0093BC",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "Gity App",
+  "short_name": "gity app",
+  "description": "群馬大学PBL2で改善するセキュリティに関するGITYアプリ",
+  "icons": [
+    {
+      "src": "/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

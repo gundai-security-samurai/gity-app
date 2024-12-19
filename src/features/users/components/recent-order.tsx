@@ -48,7 +48,7 @@ const RecentOrder = () => {
           ))}
         </ul>
       </div>
-      <Button variant="outline" className="text-secondary border-none">
+      <Button variant="outline" className="text-secondary border-none" disabled>
         また買う
       </Button>
     </div>

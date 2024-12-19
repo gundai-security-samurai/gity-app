@@ -37,7 +37,7 @@ const app = new Hono()
       const [data] = await db.select().from(users).where(eq(users.id, id));
 
       return c.json({ data });
-    }
+    },
   )
   .patch(
     "/:id",
@@ -86,7 +86,7 @@ const app = new Hono()
         .returning();
 
       return c.json({ data });
-    }
+    },
   );
 
 export default app;

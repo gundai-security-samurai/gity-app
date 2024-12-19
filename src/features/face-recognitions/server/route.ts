@@ -28,7 +28,7 @@ const app = new Hono()
         .where(eq(recognitionLogs.id, id));
 
       return c.json({ data });
-    }
+    },
   )
   .post(
     "/",
@@ -36,7 +36,7 @@ const app = new Hono()
       "json",
       z.object({
         id: z.string(),
-      })
+      }),
     ),
     async (c) => {
       const { id } = c.req.valid("json");
@@ -52,7 +52,7 @@ const app = new Hono()
         .returning();
 
       return c.json({ data });
-    }
+    },
   );
 
 export default app;

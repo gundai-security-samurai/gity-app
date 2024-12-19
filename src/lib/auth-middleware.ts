@@ -27,5 +27,5 @@ export const authMiddleware = createMiddleware<AdditionalContext>(
     c.set("session", session as Session & { user: User & { id: string } });
 
     await next();
-  }
+  },
 );

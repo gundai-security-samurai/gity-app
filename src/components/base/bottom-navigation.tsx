@@ -17,7 +17,10 @@ const routes = [
 const BottomNavigation = () => {
   const pathname = usePathname();
 
-  const isActive = useCallback((href: string) => pathname === href, [pathname]);
+  const _isActive = useCallback(
+    (href: string) => pathname === href,
+    [pathname],
+  );
 
   return (
     <footer className="pt-2 pb-4 bg-primary rounded-t-xl">

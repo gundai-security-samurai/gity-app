@@ -16,7 +16,7 @@ const app = new Hono()
       "query",
       z.object({
         userId: z.string().optional(),
-      })
+      }),
     ),
     async (c) => {
       const { userId } = c.req.valid("query");
@@ -27,7 +27,7 @@ const app = new Hono()
         .where(userId ? eq(payments.userId, userId) : undefined);
 
       return c.json({ data });
-    }
+    },
   )
   .post(
     "/",
@@ -37,7 +37,7 @@ const app = new Hono()
       z.object({
         token: z.string(),
         productIds: z.string().array(),
-      })
+      }),
     ),
     async (c) => {
       try {
@@ -50,13 +50,13 @@ const app = new Hono()
         const productCount = productIds.reduce<Record<string, number>>(
           (acc, productId) => {
             const id = catalogResult.objects?.find(
-              (object) => object.id === productId
+              (object) => object.id === productId,
             )?.itemData?.variations?.[0].id;
             if (!id) return acc;
             acc[id] = (acc[id] || 0) + 1;
             return acc;
           },
-          {}
+          {},
         );
 
         const { result: orderResult } =
@@ -114,7 +114,7 @@ const app = new Hono()
         console.error("Error create payment data:", error);
         return c.json({ error: "Server internal error" }, 500);
       }
-    }
+    },
   );
 
 export default app;
