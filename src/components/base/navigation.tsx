@@ -1,11 +1,13 @@
+"use client";
+
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/auth";
+import { useSession } from "next-auth/react";
 import UserButton from "./user-button";
 
-const Navigation = async () => {
-  const session = await auth();
+const Navigation = () => {
+  const session = useSession();
 
   return (
     <nav className="flex items-center gap-x-3">

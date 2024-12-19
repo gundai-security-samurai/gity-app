@@ -8,6 +8,7 @@ import { insertUserSchema, users } from "@/db/schema";
 import { authMiddleware } from "@/lib/auth-middleware";
 import { zValidator } from "@hono/zod-validator";
 import { createCloudImage, deleteCloudImage } from "./actions";
+import me from "./route/me";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -16,6 +17,7 @@ cloudinary.config({
 });
 
 const app = new Hono()
+  .route("/me", me)
   .get("/", authMiddleware, async (c) => {
     const data = await db.select().from(users);
 

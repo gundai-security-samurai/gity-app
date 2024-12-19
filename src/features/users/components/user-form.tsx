@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import type { ImageListType } from "react-images-uploading";
 import ReactImageUploading from "react-images-uploading";
-import type { z } from "zod";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,12 +16,11 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { insertUserSchema } from "@/db/schema";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 
-const formSchema = insertUserSchema.pick({
-  name: true,
+const formSchema = z.object({
+  name: z.string(),
 });
 
 type FromValues = z.input<typeof formSchema>;

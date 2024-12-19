@@ -5,7 +5,8 @@ import { forwardRef } from "react";
 import Link from "next/link";
 
 import UserIcon from "@/components/base/user-icon";
-import { signOut, useSession } from "next-auth/react";
+import useGetLoggedInUser from "@/features/users/api/use-get-logged-in-user";
+import { signOut } from "next-auth/react";
 import { Button, type ButtonProps } from "../ui/button";
 import {
   DropdownMenu,
@@ -15,13 +16,11 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-const routes = [
-  { href: "/dashboard/history", label: "履歴" },
-  { href: "/dashboard/setting", label: "設定" },
-];
+const routes: { href: string; label: string }[] = [];
 
 const UserButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-  const { data: session } = useSession();
+  const userQuery = useGetLoggedInUser();
+  const user = userQuery.data;
 
   return (
     <DropdownMenu>
@@ -37,7 +36,7 @@ const UserButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" className="mx-2 w-48">
-        <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
+        <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
         {routes.map((route) => (
           <DropdownMenuItem key={route.href} asChild>
             <Link href={route.href}>{route.label}</Link>

@@ -1,14 +1,14 @@
 "use server";
 
 import { createMiddleware } from "hono/factory";
-import type { Session } from "next-auth";
+import type { Session, User } from "next-auth";
 
 import { auth } from "./auth";
 
 type AdditionalContext = Record<
   "Variables",
   {
-    session: Session;
+    session: Session & { user: User & { id: string } };
   }
 >;
 
@@ -24,8 +24,8 @@ export const authMiddleware = createMiddleware<AdditionalContext>(
       return c.json({ error: "User not found" }, 404);
     }
 
-    c.set("session", session);
+    c.set("session", session as Session & { user: User & { id: string } });
 
     await next();
-  },
+  }
 );

@@ -46,7 +46,7 @@ const PaymentModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="min-h-[500px]">
         <DialogHeader>
           <DialogTitle>購入</DialogTitle>
           <DialogDescription>決済画面</DialogDescription>
@@ -66,7 +66,14 @@ const PaymentModal = () => {
                 size="sm"
                 variant="destructive"
                 className="w-fit justify-self-end"
-                onClick={() => removeProduct(product.id)}
+                onClick={() => {
+                  removeProduct(product.id);
+                  if (
+                    productIds.filter((id) => id !== product.id).length === 0
+                  ) {
+                    onClose();
+                  }
+                }}
               >
                 削除
               </Button>

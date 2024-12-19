@@ -1,6 +1,4 @@
 "use client";
-
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import Container from "@/components/layout/container";
@@ -17,14 +15,13 @@ import {
 import OrderInfo from "@/features/orders/components/order-info";
 import useOrderCart from "@/features/orders/hooks/use-order-cart";
 import PurductList from "@/features/products/components/product-list";
-import useGetUser from "@/features/users/api/use-get-user";
+import useGetLoggedInUser from "@/features/users/api/use-get-logged-in-user";
 import { useRouter } from "next/navigation";
 
 const MerchandisePage = () => {
   const router = useRouter();
   const { productIds } = useOrderCart();
-  const session = useSession();
-  const userQuery = useGetUser(session.data?.user?.id);
+  const userQuery = useGetLoggedInUser();
 
   const user = userQuery.data;
 

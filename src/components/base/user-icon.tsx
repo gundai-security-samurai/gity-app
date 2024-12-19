@@ -1,15 +1,16 @@
 "use client";
 
 import { DEFAULT_ICON } from "@/constants/user";
-import { useSession } from "next-auth/react";
+import useGetLoggedInUser from "@/features/users/api/use-get-logged-in-user";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const UserIcon = ({ className }: { className?: string }) => {
-  const { data: session } = useSession();
+  const userQuery = useGetLoggedInUser();
+  const user = userQuery.data;
 
   return (
     <Avatar className={className}>
-      <AvatarImage src={session?.user?.image || DEFAULT_ICON} alt="UserIcon" />
+      <AvatarImage src={user?.image || DEFAULT_ICON} alt="UserIcon" />
       <AvatarFallback />
     </Avatar>
   );

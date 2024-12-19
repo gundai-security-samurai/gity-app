@@ -2,7 +2,7 @@
 import {} from "@/components/ui/form";
 import { insertUserSchema } from "@/db/schema";
 import useEditUser from "@/features/users/api/use-edit-user";
-import useGetUser from "@/features/users/api/use-get-user";
+import useGetLoggedInUser from "@/features/users/api/use-get-logged-in-user";
 import UserForm from "@/features/users/components/user-form";
 import { useSession } from "next-auth/react";
 import type { ImageListType } from "react-images-uploading";
@@ -17,7 +17,7 @@ type FromValues = z.input<typeof formSchema>;
 const SettingsProfilePage = () => {
   const session = useSession();
   const editUser = useEditUser(session.data?.user?.id);
-  const userQuery = useGetUser(session.data?.user?.id);
+  const userQuery = useGetLoggedInUser();
 
   const user = userQuery.data;
 
