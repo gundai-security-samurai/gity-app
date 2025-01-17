@@ -9,7 +9,8 @@
     "check": "npx @biomejs/biome check --write .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "face:seed": "bun ./scripts/face-seed.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.4",

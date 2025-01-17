@@ -36,6 +36,7 @@ const app = new Hono()
       "json",
       z.object({
         id: z.string(),
+        detected_at:z.coerce.date().optional()
       }),
     ),
     async (c) => {
