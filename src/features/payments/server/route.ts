@@ -1,10 +1,10 @@
 import { zValidator } from "@hono/zod-validator";
-import { eq } from "drizzle-orm";
+import { eq, getTableColumns } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 
 import { db } from "@/db/drizzle";
-import { payments } from "@/db/schema";
+import { payments, users } from "@/db/schema";
 import { authMiddleware } from "@/lib/auth-middleware";
 import { squareClient } from "@/lib/square";
 
@@ -22,8 +22,9 @@ const app = new Hono()
       const { userId } = c.req.valid("query");
 
       const data = await db
-        .select()
+        .select({ ...getTableColumns(payments), user: getTableColumns(users) })
         .from(payments)
+        .leftJoin(users, eq(payments.userId, users.id))
         .where(userId ? eq(payments.userId, userId) : undefined);
 
       return c.json({ data });

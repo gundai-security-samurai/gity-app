@@ -2,13 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/hono";
 
-const useGetPayments = (userId?: string) => {
+const useGetUsers = () => {
   const query = useQuery({
-    queryKey: ["payments"],
+    queryKey: ["users"],
     queryFn: async () => {
-      const response = await client.api.payments.$get({ query: { userId } });
+      const response = await client.api.users.$get();
       if (!response.ok) {
-        throw new Error("Failed to fetch payments");
+        throw new Error("Failed to fetch users");
       }
       const { data } = await response.json();
       return data;
@@ -18,4 +18,4 @@ const useGetPayments = (userId?: string) => {
   return query;
 };
 
-export default useGetPayments;
+export default useGetUsers;

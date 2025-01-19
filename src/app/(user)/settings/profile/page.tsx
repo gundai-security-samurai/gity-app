@@ -10,6 +10,8 @@ import type { z } from "zod";
 
 const formSchema = insertUserSchema.pick({
   name: true,
+  bio: true,
+  email: true,
 });
 
 type FromValues = z.input<typeof formSchema>;
@@ -21,7 +23,11 @@ const SettingsProfilePage = () => {
 
   const user = userQuery.data;
 
-  const defaultValues = { name: user?.name ?? "" };
+  const defaultValues = {
+    name: user?.name ?? "",
+    bio: user?.bio ?? "",
+    email: user?.email ?? "",
+  };
 
   const handleSubmit = (
     values: FromValues,

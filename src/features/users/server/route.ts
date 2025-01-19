@@ -69,10 +69,25 @@ const app = new Hono()
 
       let faceImageURL: string | undefined;
       if (faceImage) {
-        if (user.faceImage) {
-          await deleteCloudImage(user.faceImage);
+        try {
+          await fetch(`${process.env.NEXT_PUBLIC_RASPI_URL}/upload`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: user.id,
+              data_url: faceImage,
+            }),
+          });
+
+          if (user.faceImage) {
+            await deleteCloudImage(user.faceImage);
+          }
+          faceImageURL = await createCloudImage(faceImage);
+        } catch (error) {
+          console.error(error);
         }
-        faceImageURL = await createCloudImage(faceImage);
       }
 
       const [data] = await db

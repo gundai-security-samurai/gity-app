@@ -15,6 +15,13 @@
       "when": 1734498325326,
       "tag": "0001_illegal_sabretooth",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737295715600,
+      "tag": "0002_yielding_tomas",
+      "breakpoints": true
     }
   ]
 }

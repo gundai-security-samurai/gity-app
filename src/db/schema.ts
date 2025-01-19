@@ -20,6 +20,7 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   faceImage: text("face_image"),
+  bio: text("bio"),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({

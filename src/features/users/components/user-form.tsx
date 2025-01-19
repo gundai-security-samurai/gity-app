@@ -16,11 +16,14 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string(),
+  bio: z.string(),
+  email: z.string(),
 });
 
 type FromValues = z.input<typeof formSchema>;
@@ -92,75 +95,77 @@ const UserForm = ({
 
   return (
     <Form {...form}>
-      <div className="mb-5">
-        <ReactImageUploading
-          value={imageUpload}
-          onChange={handleChangeImage}
-          maxNumber={1}
-          acceptType={["jpg", "png", "jpeg"]}
-        >
-          {({ imageList, onImageUpdate }) => (
-            <div className="flex w-full flex-col items-center justify-center">
-              {imageList.map((image, index) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                <div key={index}>
-                  {image.dataURL && (
-                    <div className="relative size-24">
-                      <Image
-                        fill
-                        src={image.dataURL as string}
-                        alt="avatar"
-                        className="rounded-full object-cover"
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-              {imageList.length > 0 && (
-                <div className="mt-3 text-center">
-                  <Button variant="outline" onClick={() => onImageUpdate(0)}>
-                    アバターの変更
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
-        </ReactImageUploading>
-      </div>
-      <div className="mb-5">
-        <ReactImageUploading
-          value={faceImageUpload}
-          onChange={handleChangeFaceImage}
-          maxNumber={1}
-          acceptType={["jpg", "png", "jpeg"]}
-        >
-          {({ imageList, onImageUpdate }) => (
-            <div className="flex w-full flex-col items-center justify-center">
-              {imageList.map((image, index) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                <div key={index}>
-                  {image.dataURL && (
-                    <div className="relative size-24">
-                      <Image
-                        fill
-                        src={image.dataURL as string}
-                        alt="face"
-                        className="rounded-full object-cover"
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-              {imageList.length > 0 && (
-                <div className="mt-3 text-center">
-                  <Button variant="outline" onClick={() => onImageUpdate(0)}>
-                    顔写真の変更
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
-        </ReactImageUploading>
+      <div className="mb-5 flex items-center gap-5 place-content-center">
+        <div className="">
+          <ReactImageUploading
+            value={imageUpload}
+            onChange={handleChangeImage}
+            maxNumber={1}
+            acceptType={["jpg", "png", "jpeg"]}
+          >
+            {({ imageList, onImageUpdate }) => (
+              <div className="flex w-full flex-col items-center justify-center">
+                {imageList.map((image, index) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                  <div key={index}>
+                    {image.dataURL && (
+                      <div className="relative size-24">
+                        <Image
+                          fill
+                          src={image.dataURL as string}
+                          alt="avatar"
+                          className="rounded-full object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {imageList.length > 0 && (
+                  <div className="mt-3 text-center">
+                    <Button variant="outline" onClick={() => onImageUpdate(0)}>
+                      アバターの変更
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+          </ReactImageUploading>
+        </div>
+        <div className="">
+          <ReactImageUploading
+            value={faceImageUpload}
+            onChange={handleChangeFaceImage}
+            maxNumber={1}
+            acceptType={["jpg", "png", "jpeg"]}
+          >
+            {({ imageList, onImageUpdate }) => (
+              <div className="flex w-full flex-col items-center justify-center">
+                {imageList.map((image, index) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                  <div key={index}>
+                    {image.dataURL && (
+                      <div className="relative size-24">
+                        <Image
+                          fill
+                          src={image.dataURL as string}
+                          alt="face"
+                          className="rounded-lg object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {imageList.length > 0 && (
+                  <div className="mt-3 text-center">
+                    <Button variant="outline" onClick={() => onImageUpdate(0)}>
+                      顔写真の変更
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+          </ReactImageUploading>
+        </div>
       </div>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
@@ -173,7 +178,47 @@ const UserForm = ({
             <FormItem>
               <FormLabel>名前</FormLabel>
               <FormControl>
-                <Input disabled={disabled} placeholder="名前" {...field} />
+                <Input
+                  disabled={disabled}
+                  placeholder="名前"
+                  className="bg-background"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="email"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>メールアドレス</FormLabel>
+              <FormControl>
+                <Input
+                  disabled
+                  placeholder="メールアドレス"
+                  className="bg-background"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="bio"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>自己紹介</FormLabel>
+              <FormControl>
+                <Textarea
+                  disabled={disabled}
+                  placeholder="自己紹介..."
+                  rows={5}
+                  className="bg-background"
+                  {...field}
+                />
               </FormControl>
             </FormItem>
           )}
